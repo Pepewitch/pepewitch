@@ -4,11 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "install": "cd functions && npm install && cd ../frontend && yarn",
-    "start": "concurrently --kill-others --names FUNCTIONS,FRONTEND \"cd functions && npm start\" \"cd frontend && npm start\""
+    "dep-install": "cd functions && npm install && cd ../frontend && yarn",
+    "build": "cd functions && npm run build && cd ../frontend && yarn build",
+    "start": "concurrently --kill-others --names FUNCTIONS,FRONTEND \"cd functions && npm tun watch\" \"cd frontend && npm start\"",
+    "deploy": "cd functions && npm run deploy && cd ../frontend && yarn deploy",
+    "deploy:ci": "cd functions && npm run deploy:ci && cd ../frontend && yarn deploy:ci"
   },
   "devDependencies": {
     "concurrently": "^4.1.1",
+    "firebase": "^6.2.4",
     "firebase-tools": "^7.0.2"
   }
 }

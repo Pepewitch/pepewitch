@@ -11,8 +11,9 @@ jobs:
             - node-modules-{{ checksum "package.json" }}
             - functions-node-modules-{{ checksum "functions/package.json" }}
             - frontend-node-modules-{{ checksum "frontend/package.json" }}
-      - run: sudo npm install -g npm@latest
+      - run: sudo npm install -g npm@6.9.2
       - run: npm install
+      - run: npm run dep-install
       - save_cache:
           key: node-modules-{{ checksum "package.json" }}
           paths:
@@ -25,8 +26,8 @@ jobs:
           key: frontend-node-modules-{{ checksum "frontend/package.json" }}
           paths:
             - frontend/node_modules/
-      - run: npm run build-prod
-      - run: npm run deploy --token=$FIREBASE_TOKEN --non-interactive
+      - run: npm run build
+      - run: npm run deploy:ci
       
 workflows:
   version: 2
