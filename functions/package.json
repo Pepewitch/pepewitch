@@ -1,0 +1,27 @@
+{
+  "name": "functions",
+  "scripts": {
+    "lint": "tslint --project tsconfig.json",
+    "build": "tsc",
+    "firebase:serve": "firebase serve --only functions",
+    "serve": "npm run build && npm run firebase:serve",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "nodemon -e ts --exec npm run serve",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^8.2.0",
+    "firebase-functions": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1",
+    "tslint": "^5.12.0",
+    "typescript": "^3.2.2"
+  },
+  "private": true
+}
