@@ -28,8 +28,8 @@ jobs:
             - frontend/node_modules/
       - run: npm run build
   deploy:
-    machine:
-      enabled: true
+    docker:
+      - image: circleci/node:latest
     working_directory: ~/project
     steps:
       - checkout
