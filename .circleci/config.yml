@@ -32,42 +32,25 @@ jobs:
           paths:
             - frontend/node_modules/
       - run: npm run build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
   deploy:
     executor: node-executor
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - node-modules-{{ checksum "package.json" }}
-            - functions-node-modules-{{ checksum "functions/package.json" }}
-            - frontend-node-modules-{{ checksum "frontend/package.json" }}
-      - run: sudo npm install -g npm@6.9.2
-      - run: npm install
-      - run: npm run dep-install
-      - save_cache:
-          key: node-modules-{{ checksum "package.json" }}
-          paths:
-            - node_modules/
-      - save_cache:
-          key: functions-node-modules-{{ checksum "functions/package.json" }}
-          paths:
-            - functions/node_modules/
-      - save_cache:
-          key: frontend-node-modules-{{ checksum "frontend/package.json" }}
-          paths:
-            - frontend/node_modules/
-      - run: npm run build
+      - attach_workspace:
+          at: ~/project
       - run: npm run deploy:ci
 
 workflows:
   version: 2.1
   build_and_deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-              ignore: master
+      - build
       - deploy:
+          requires:
+            - build
           filters:
             branches:
               only: master
