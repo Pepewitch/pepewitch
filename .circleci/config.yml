@@ -1,29 +1,5 @@
 version: 2.1
 
-build: &build
-  - checkout
-  - restore_cache:
-      keys:
-        - node-modules-{{ checksum "package.json" }}
-        - functions-node-modules-{{ checksum "functions/package.json" }}
-        - frontend-node-modules-{{ checksum "frontend/package.json" }}
-  - run: sudo npm install -g npm@6.9.2
-  - run: npm install
-  - run: npm run dep-install
-  - save_cache:
-      key: node-modules-{{ checksum "package.json" }}
-      paths:
-        - node_modules/
-  - save_cache:
-      key: functions-node-modules-{{ checksum "functions/package.json" }}
-      paths:
-        - functions/node_modules/
-  - save_cache:
-      key: frontend-node-modules-{{ checksum "frontend/package.json" }}
-      paths:
-        - frontend/node_modules/
-  - run: npm run build
-
 executors:
   node-executor:
     docker:
@@ -34,11 +10,53 @@ jobs:
   build:
     executor: node-executor
     steps:
-      <<: *build
+      - checkout
+      - restore_cache:
+          keys:
+            - node-modules-{{ checksum "package.json" }}
+            - functions-node-modules-{{ checksum "functions/package.json" }}
+            - frontend-node-modules-{{ checksum "frontend/package.json" }}
+      - run: sudo npm install -g npm@6.9.2
+      - run: npm install
+      - run: npm run dep-install
+      - save_cache:
+          key: node-modules-{{ checksum "package.json" }}
+          paths:
+            - node_modules/
+      - save_cache:
+          key: functions-node-modules-{{ checksum "functions/package.json" }}
+          paths:
+            - functions/node_modules/
+      - save_cache:
+          key: frontend-node-modules-{{ checksum "frontend/package.json" }}
+          paths:
+            - frontend/node_modules/
+      - run: npm run build
   deploy:
     executor: node-executor
     steps:
-      <<: *build
+      - checkout
+      - restore_cache:
+          keys:
+            - node-modules-{{ checksum "package.json" }}
+            - functions-node-modules-{{ checksum "functions/package.json" }}
+            - frontend-node-modules-{{ checksum "frontend/package.json" }}
+      - run: sudo npm install -g npm@6.9.2
+      - run: npm install
+      - run: npm run dep-install
+      - save_cache:
+          key: node-modules-{{ checksum "package.json" }}
+          paths:
+            - node_modules/
+      - save_cache:
+          key: functions-node-modules-{{ checksum "functions/package.json" }}
+          paths:
+            - functions/node_modules/
+      - save_cache:
+          key: frontend-node-modules-{{ checksum "frontend/package.json" }}
+          paths:
+            - frontend/node_modules/
+      - run: npm run build
       - run: npm run deploy:ci
 
 workflows:
